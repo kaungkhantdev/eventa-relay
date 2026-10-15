@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Outbox relay — publishes eventa-api's transactional outbox to RabbitMQ",
   "private": true,
+  "license": "UNLICENSED",
   "packageManager": "pnpm@11.9.0",
   "scripts": {
     "build": "nest build",

@@ -73,3 +73,9 @@ SELECT count(*), min(created_at) AS oldest
 
 That query is the signal worth alerting on — outbox lag, not process liveness.
 A relay that is running but not publishing looks healthy to a liveness probe.
+
+## License
+
+Proprietary — all rights reserved. This repository is public so that it can be
+read; it is not open-source software, and no right to use, copy, modify or run
+it is granted. See [LICENSE](LICENSE).
