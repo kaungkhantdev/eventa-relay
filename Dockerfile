@@ -38,10 +38,13 @@
 #                      exception to "scale by replicas": run EXACTLY ONE until
 #                      the reader takes row locks (README, "Run exactly one
 #                      replica"); eventa-infra pins replicas: 1.
-#   IX   Disposability exec-form CMD, so node is PID 1 and gets SIGTERM itself;
-#                      main.ts stops the poll timer and closes the app. A row is
-#                      marked published only after the broker confirms it, so a
-#                      pass cut short is published by the next process, not lost.
+#   IX   Disposability exec-form CMD, so node is PID 1 and gets SIGTERM itself.
+#                      main.ts enables Nest's shutdown hooks and adds no signal
+#                      handler of its own, so the app closes once: the poller
+#                      stops its timer, the AMQP channel closes, the pg pool
+#                      ends. A row is marked published only after the broker
+#                      confirms it, so a pass cut short is published by the
+#                      next process, not lost.
 #                      Boot is `node dist/main`: no install, no compile.
 #   X    Dev/prod      `dev` and `prod` share the base image, the lockfile and
 #                      this file; the umbrella compose runs the same backing

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppConfigModule } from './config/config.module';
 import { DatabaseModule } from './db/database.module';
+import { OutboxPoller } from './relay/outbox-poller';
 import { OutboxReaderPort } from './relay/outbox-reader.port';
 import { OutboxReader } from './relay/outbox-reader.repository';
 import { OutboxRelay } from './relay/outbox-relay';
@@ -17,6 +18,7 @@ import { RabbitPublisher } from './relay/rabbit-publisher';
   imports: [AppConfigModule, DatabaseModule],
   providers: [
     OutboxRelay,
+    OutboxPoller,
     { provide: OutboxReaderPort, useClass: OutboxReader },
     { provide: PublisherPort, useClass: RabbitPublisher },
   ],
