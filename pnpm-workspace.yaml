@@ -1,0 +1,7 @@
+# Which dependencies may run their install scripts. pnpm 11 refuses any it has
+# not been told about (ERR_PNPM_IGNORED_BUILDS), so `pnpm install
+# --frozen-lockfile` fails on a clean CI runner without this list. A machine
+# whose global pnpm config sets dangerouslyAllowAllBuilds hides the failure.
+allowBuilds:
+  # Installs the native resolver binding Jest's module resolution loads.
+  unrs-resolver: true

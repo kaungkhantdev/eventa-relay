@@ -73,3 +73,32 @@ SELECT count(*), min(created_at) AS oldest
 
 That query is the signal worth alerting on — outbox lag, not process liveness.
 A relay that is running but not publishing looks healthy to a liveness probe.
+
+## Container image
+
+One `Dockerfile` builds both images. Its last stage is production, so a plain
+build gives the image eventa-infra deploys:
+
+```bash
+# Production: compiled dist/ + production dependencies, runs as uid 1000
+docker build -t eventa-relay .
+
+# Configuration comes from the environment only; no .env is copied into the
+# image. The filesystem can be read-only: the relay writes nothing to it.
+docker run --rm --read-only --env-file <file> eventa-relay
+
+# Watch mode, the target the umbrella compose (../eventa) runs
+docker build --target dev -t eventa-relay:dev .
+```
+
+The production image runs `node dist/main` directly: no pnpm at run time, no
+TypeScript, no devDependencies. It exposes no port and has no `HEALTHCHECK`,
+for the reason above, and it still runs as exactly one replica. The comment at
+the top of the `Dockerfile` lists how the image meets each of the twelve
+factors.
+
+## License
+
+Proprietary — all rights reserved. This repository is public so that it can be
+read; it is not open-source software, and no right to use, copy, modify or run
+it is granted. See [LICENSE](LICENSE).

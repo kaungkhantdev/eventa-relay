@@ -1,0 +1,34 @@
+# Build context for the Dockerfile. Dependencies are installed inside the image
+# (Linux binaries), never copied from the host (macOS binaries); nothing built
+# on the host goes into a layer; no secret goes into any image.
+
+# Secrets and config (twelve-factor III): config comes from the environment at
+# run time, never from a file baked into an image.
+**/.env
+**/.env.*
+
+# Installed or built inside the image
+node_modules
+dist
+build
+*.tsbuildinfo
+
+# Not needed to build or run the service. Leaving them out also means editing
+# them does not invalidate the build cache.
+.git
+.github
+Dockerfile
+.dockerignore
+*.md
+test
+coverage
+.nyc_output
+
+# Machine-local
+*.log
+logs
+.DS_Store
+.idea
+.vscode
+.temp
+.tmp
