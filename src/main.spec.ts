@@ -10,6 +10,21 @@ import { bootstrap } from './main';
 import { OutboxReaderPort } from './relay/outbox-reader.port';
 import { PublisherPort } from './relay/publisher.port';
 
+/**
+ * The real AppConfigModule must never load here. Its ConfigModule.forRoot()
+ * reads .env and validates the environment the moment app.module.ts is
+ * imported, before overrideModule() can replace it. A developer's .env
+ * satisfied that; CI has none, so every test failed on DATABASE_URL.
+ * AppModule imports this empty stand-in, which TestConfigModule replaces.
+ */
+jest.mock('./config/config.module', () => {
+  const { Module } =
+    jest.requireActual<typeof import('@nestjs/common')>('@nestjs/common');
+  class AppConfigModule {}
+  Module({})(AppConfigModule);
+  return { AppConfigModule };
+});
+
 const POLL_MS = 5;
 
 /** The relay's config, from here rather than from a .env or the environment. */
